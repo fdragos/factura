@@ -4,6 +4,7 @@ import streamlit as st
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from datetime import datetime
+import info
 
 def genereaza_factura_pdf(date, cale_salveaza):
     pdf = canvas.Canvas(cale_salveaza, pagesize=A4)
@@ -127,12 +128,12 @@ with st.form("form_factura"):
     data_factura = st.date_input("Data facturare").strftime("%d.%m.%Y")
 
     st.subheader("Date firma")
-    firma = st.text_input("Denumire firma", "Nicmond Impex SRL")
-    cif = st.text_input("C.I.F.", "RO10823292")
-    reg_com = st.text_input("Nr. ord. reg. com.", "J08/894/1998")
-    sediu = st.text_input("Sediu complet", "SAT CRISTIAN COM. CRISTIAN, STR. MIHAI EMINESCU, NR. 44D, Jud. Brasov")
-    iban = st.text_input("Cont IBAN", "RO63RNCB0857008643990001")
-    banca = st.text_input("Banca", "BANCA COMERCIALA ROMANA")
+    firma = st.text_input("Denumire firma", info.firma)
+    cif = st.text_input("C.I.F.", info.cif)
+    reg_com = st.text_input("Nr. ord. reg. com.", info.reg_com)
+    sediu = st.text_input("Sediu complet", info.sediu)
+    iban = st.text_input("Cont IBAN", info.iban)
+    banca = st.text_input("Banca", info.banca)
 
     st.subheader("Date rezervare")
     platforma = st.selectbox("Platformă", ["airbnb", "booking"])
@@ -141,8 +142,8 @@ with st.form("form_factura"):
     checkout = st.date_input("Check-out").strftime("%d.%m.%Y")
     nopti = st.number_input("Număr nopți", 1)
 
-    suma_bruta = st.number_input("Sumă brută client (Booking)", value=300.00)
-    suma_neta = st.number_input("Sumă netă încasată (Airbnb)", value=276.64)
+    suma_bruta = st.number_input("Sumă brută client (Booking)", value=0)
+    suma_neta = st.number_input("Sumă netă încasată (Airbnb)", value=0)
 
     st.subheader("Date client (pers. fizică pentru Booking / Airbnb Irlanda)")
     client = st.text_input("Denumire client", "Airbnb Ireland UC")
