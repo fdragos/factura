@@ -8,10 +8,18 @@ from factura import genereaza_factura_pdf
 os.makedirs("facturi", exist_ok=True)
 init_db()
 
-st.set_page_config("Facturi Airbnb / Booking", layout="wide")
+st.set_page_config("Facturi Airbnb / Booking", layout="centered", )
 tab1, tab2 = st.tabs(["🧾 Creează factură", "📁 Facturi salvate"])
 
 with tab1:
+
+    st.title("🧾 Creează factură")
+    if "platforma" not in st.session_state:
+        st.session_state["platforma"] = "airbnb"
+
+    platforma = st.selectbox("Platformă", ["airbnb", "booking"], index=0 if st.session_state["platforma"] == "airbnb" else 1)
+    st.session_state["platforma"] = platforma
+
     with st.form("form"):
         st.subheader("Date factura")
         serie_factura = st.text_input("Serie factura", "BVN")
@@ -27,19 +35,23 @@ with tab1:
         banca = st.text_input("Banca", info.banca)
 
         st.subheader("Rezervare")
-        platforma = st.selectbox("Platformă", ["airbnb", "booking"])
-        cod_rezervare = st.text_input("Cod rezervare", "HMZS29R93J")
+        cod_rezervare = st.text_input("Cod rezervare", "")
         checkin = st.date_input("Check-in").strftime("%d.%m.%Y")
         checkout = st.date_input("Check-out").strftime("%d.%m.%Y")
-        nopti = st.number_input("Nopți", 1)
+        nopti = st.number_input("Nopți", 0)
         suma_bruta = st.number_input("Sumă brută client (Booking)", value=0)
         suma_neta = st.number_input("Sumă netă încasată (Airbnb)", value=0)
         tva = st.number_input("TVA (%)", 9)
 
         st.subheader("Client")
-        client = st.text_input("Nume", "Airbnb Ireland UC")
-        adresa = st.text_input("Adresă", "8 Hanover Quay, Dublin")
-        tva_client = st.text_input("TVA client", "IE9827384L")
+        if st.session_state["platforma"] == "airbnb":
+            client = st.text_input("Nume", "Airbnb Ireland UC", disabled=True)
+            adresa = st.text_input("Adresă", "8 Hanover Quay, Dublin 2, Irlanda", disabled=True)
+            tva_client = st.text_input("TVA client", "IE9827384L", disabled=True)
+        else:
+            client = st.text_input("Nume", "")
+            adresa = st.text_input("Adresă", "")
+            tva_client = st.text_input("TVA client", "")
 
         trimite = st.form_submit_button("✅ Generează")
 
